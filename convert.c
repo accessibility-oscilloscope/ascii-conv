@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <fcntl.h> 
+#include <unistd.h>
 
 int main(int argc, char** argv) {
 
-int i=1,j,tmp, val,remainder,quotient;
+int i=1,j,tmp, val,remainder,quotient,fd;
 char hexadecimalNumber[100];
 
 char *buffer;
@@ -18,8 +19,11 @@ if( buffer == NULL)
     exit(1);
 }
 
-printf("Type a number to convert: ");
-getline(&buffer,&size,stdin);
+//printf("Type a number to convert: ");
+//getline(&buffer,&size,stdin);
+
+fd = open("test.txt", O_RDONLY);
+read(fd, buffer, size);
 
 val = atoi(buffer);
 
@@ -38,6 +42,7 @@ while(quotient!=0) {
 	for (j = i -1 ;j> 0;j--)
 	      printf("%c",hexadecimalNumber[j]);
 
+free(buffer);
 return 0;
 
 }
