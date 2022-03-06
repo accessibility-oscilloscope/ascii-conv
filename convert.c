@@ -10,7 +10,6 @@ char hexadecimalNumber[100];
 
 char *buffer;
 size_t size = 32;
-char* str;
 
 buffer = (char *)malloc(size * sizeof(char));
 if( buffer == NULL)
@@ -38,9 +37,6 @@ while(quotient!=0) {
 
 	for (j = i -1 ;j> 0;j--)
 	      printf("%c",hexadecimalNumber[j]);
-
-//printf("%x\n", val);
-//printf("Sizeof result is %zu\n", sizeof(int));
 
 return 0;
 
