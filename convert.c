@@ -22,8 +22,9 @@ if( buffer == NULL)
 //printf("Type a number to convert: ");
 //getline(&buffer,&size,stdin);
 
-fd = open("test.txt", O_RDONLY);
-read(fd, buffer, size);
+//fd = open("test.txt", O_RDONLY);
+
+read(STDIN_FILENO, buffer, size);
 
 val = atoi(buffer);
 
