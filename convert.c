@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
+ #include <fcntl.h>
 
 
-int main(int argc, char **argv)
+int main(int ac, char *av[])
 {
-
+    assert(ac == 3 && "usage: ./convert in-fifo out-fifo");
     int result, val1, val2, buffset, offset1, offset2;
     char *buffer;
     char arr1[100];
@@ -16,6 +18,9 @@ int main(int argc, char **argv)
     u_int8_t output[2];
     bool first = true;
 
+    const char *in_fifo = av[1];
+    const char *out_fifo = av[2];
+
     buffer = (char *)malloc(size * sizeof(char));
     if (buffer == NULL)
     {
@@ -23,9 +28,12 @@ int main(int argc, char **argv)
         exit(1);
     }
    
+    const int fd = open(in_fifo, O_RDONLY);
+    const int fd_out = open(out_fifo, O_WRONLY);
+
     while (1)
     {
-        result = read(STDIN_FILENO, (void *) (&buffer[buffset]), 1);
+        result = read(fd, (void *) (&buffer[buffset]), 1);
         
         if (result != 1)
         {
@@ -55,7 +63,7 @@ int main(int argc, char **argv)
     output[1] = val2;
 
     //printf("%d %d", output[0], output[1]);
-    write(STDOUT_FILENO, &output, 2);
+    write(fd_out, &output, 2);
     free(buffer);
 
     return 0;
