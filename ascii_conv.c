@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,8 +10,18 @@
 int
 main(int argc, char** argv)
 {
-  mkfifo("/tmp/testingfifo", 0666);
-  FILE* in_file = fopen("/tmp/testingfifo", "r");
+  assert(argc == 3 && "usage: ascii_conv $input_fifo $output_fifo");
+  if (mkfifo(argv[1], 0666) == -1) {
+    syslog(LOG_ERR, "creating ascii input fifo failed (%m)");
+  }
+  FILE* in_file = fopen(argv[1], "r");
+  if (!in_file) {
+    syslog(LOG_ERR, "opening ascii input fifo failed (%m)");
+  }
+  int out_fd = open(argv[2], O_WRONLY);
+  if (out_fd == -1) {
+    syslog(LOG_ERR, "opening bin output fifo failed (%m)");
+  }
   while (1)
   {
     int val;
@@ -20,11 +31,13 @@ main(int argc, char** argv)
       if (ferror(in_file) != 0)
       {
         // not end of file (expected), we would like to know what's goin on
-        syslog(LOG_ERR, "error %i\n", ferror(in_file));
+        syslog(LOG_INFO, "ascii integer read error");
       }
       clearerr(in_file);
       continue;
     }
-    write(STDOUT_FILENO, &val, sizeof(int));
+    write(out_fd, &val, sizeof(int));
   }
+  close(out_fd);
+  fclose(in_file);
 }
