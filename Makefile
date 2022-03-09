@@ -1,9 +1,9 @@
-all: ascii_conv
+all: ascii-conv
 
 FLAGS = -g -Wall -Werror -std=c99
 
 clean:
-	rm ascii_conv
+	rm ascii-conv
 
-ascii_conv: ascii_conv.c
+ascii-conv: ascii-conv.c
 	gcc $(FLAGS) -o $@ $^
