@@ -6,4 +6,4 @@ clean:
 	rm ascii-conv
 
 ascii-conv: ascii-conv.c
-	gcc $(FLAGS) -o $@ $^
+	$(CC) $(FLAGS) -o $@ $^
