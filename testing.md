@@ -29,3 +29,9 @@ the same should work for any combination of whitespace, e.g.
 echo -ne "20000 40000 127 127 128 0 0 100 30 25 " > /tmp/testingfifo
 echo -ne "20000 40000   \n\n  127 127 128 0 0 100 30 25 " > /tmp/testingfifo
 ```
+
+
+testing that we can read single integers from a stream
+```
+echo -ne "20000\n40000\n127\n127\n128\n0\n0\n100\n30\n25\n" | ./ascii-conv /dev/stdin /dev/stdout | ./reader /dev/stdin
+```
