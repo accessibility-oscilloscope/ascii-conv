@@ -9,17 +9,21 @@
 
 int main(int argc, char **argv) {
   assert(argc == 3 && "usage: ascii_conv $input_fifo $output_fifo");
-  if (mkfifo(argv[1], 0666) == -1) {
-    syslog(LOG_ERR, "creating ascii input fifo failed (%m)");
-  }
+  openlog("ascii-conv", 0, LOG_USER);
+
   FILE *in_file = fopen(argv[1], "r");
   if (!in_file) {
     syslog(LOG_ERR, "opening ascii input fifo failed (%m)");
+    exit(-1);
   }
+
   int out_fd = open(argv[2], O_WRONLY);
   if (out_fd == -1) {
     syslog(LOG_ERR, "opening bin output fifo failed (%m)");
+    exit(-1);
   }
+
+  syslog(LOG_INFO, "ascii-conv: successfully intialized");
   while (1) {
     int val;
     int ret = fscanf(in_file, "%i", &val);
